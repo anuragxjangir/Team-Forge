@@ -497,7 +497,8 @@ async function requestToJoinProject(projectId) {
       .from("invitations")
       .select("id, status, request_type")
       .eq("project_id", projectId)
-      .eq("receiver_id", user.id)
+      .eq("sender_id", user.id)
+      .eq("request_type", "join_request")
       .in("status", ["pending", "accepted"])
       .maybeSingle();
 
@@ -1206,7 +1207,11 @@ async function loadUserProjects(userId) {
       console.error("Project members loading error:", membersError);
     }
 
-    const memberCount = members?.length || 0;
+    const teamMembers = (members || []).filter(
+      (member) => member.user_id !== project.creator_id,
+    );
+
+    const memberCount = teamMembers.length;
 
     const totalMembers = memberCount + 1;
 
@@ -1750,7 +1755,9 @@ async function loadRecommendedTeammates(userId) {
 
   console.log("Final recommendations:", recommendations);
 
-  const meaningfulMatches = recommendations.filter((item) => item.score >= 40);
+  const meaningfulMatches = recommendations
+    .filter((item) => item.score > 0)
+    .slice(0, 5);
 
   setText("matchCount", meaningfulMatches.length);
 
@@ -2277,6 +2284,7 @@ async function loadProjectDetails() {
     titleElement.textContent = "No project selected";
 
     setText("projectDescription", "Please open a project from your dashboard.");
+
     setText("projectSkills", "—");
     setText("projectTeamSize", "—");
     setText("projectProgress", "—");
@@ -2285,9 +2293,9 @@ async function loadProjectDetails() {
     return;
   }
 
-  // ==================================================
+  // ==========================================
   // CURRENT USER
-  // ==================================================
+  // ==========================================
 
   const {
     data: { user },
@@ -2299,9 +2307,9 @@ async function loadProjectDetails() {
     return;
   }
 
-  // ==================================================
+  // ==========================================
   // LOAD PROJECT
-  // ==================================================
+  // ==========================================
 
   const { data: project, error: projectError } = await supabaseClient
     .from("projects")
@@ -2331,84 +2339,79 @@ async function loadProjectDetails() {
 
     return;
   }
-  // ==================================================
-  // DISPLAY PROJECT INFORMATION
-  // ==================================================
 
-  document.getElementById("projectTitle").textContent =
-    project.title || "Untitled Project";
+  // ==========================================
+  // PROJECT INFORMATION
+  // ==========================================
 
-  document.getElementById("projectDescription").textContent =
-    project.description || "No description available.";
+  titleElement.textContent = project.title || "Untitled Project";
 
-  // ==================================================
-  // PROJECT MANAGEMENT CONTROLS
-  // ==================================================
+  setText(
+    "projectDescription",
+    project.description || "No description available.",
+  );
+
+  setText(
+    "projectSkills",
+    (project.required_skills || []).join(", ") || "Not specified",
+  );
+
+  setText("projectTeamSize", project.team_size);
+
+  // ==========================================
+  // CREATOR / MANAGEMENT
+  // ==========================================
 
   const managementActions = document.getElementById("projectManagementActions");
 
   const editProjectBtn = document.getElementById("editProjectBtn");
+
   const closeProjectBtn = document.getElementById("closeProjectBtn");
+
   const deleteProjectBtn = document.getElementById("deleteProjectBtn");
 
   const isCreator = user.id === project.creator_id;
   const isClosed = project.status === "closed";
 
-  // Creator can always see the management area
-  // because Delete Project should also work on closed projects.
   if (managementActions) {
     managementActions.style.display = isCreator ? "flex" : "none";
   }
 
-  // --------------------------------------------------
-  // EDIT PROJECT
-  // --------------------------------------------------
-
-  // Editing is allowed only while the project is not closed.
   if (editProjectBtn) {
     editProjectBtn.style.display =
       isCreator && !isClosed ? "inline-flex" : "none";
   }
 
   if (editProjectBtn && isCreator && !isClosed) {
-    editProjectBtn.addEventListener("click", () => {
+    editProjectBtn.onclick = () => {
       window.location.href = `create-project.html?edit=${projectId}`;
-    });
+    };
   }
 
-  // --------------------------------------------------
-  // CLOSE PROJECT
-  // --------------------------------------------------
-
-  // Closing is allowed only while the project is not already closed.
   if (closeProjectBtn) {
     closeProjectBtn.style.display =
       isCreator && !isClosed ? "inline-flex" : "none";
   }
 
   if (closeProjectBtn && isCreator && !isClosed) {
-    closeProjectBtn.addEventListener("click", () => {
+    closeProjectBtn.onclick = () => {
       closeProject(projectId);
-    });
+    };
   }
-
-  // --------------------------------------------------
-  // DELETE PROJECT
-  // --------------------------------------------------
 
   if (deleteProjectBtn) {
     deleteProjectBtn.style.display = isCreator ? "inline-flex" : "none";
   }
 
   if (deleteProjectBtn && isCreator) {
-    deleteProjectBtn.addEventListener("click", () => {
+    deleteProjectBtn.onclick = () => {
       deleteProject(projectId);
-    });
+    };
   }
 
-  // ==================================================
-  // JOIN PROJECT
-  // ==================================================
+  // ==========================================
+  // JOIN BUTTON
+  // ==========================================
 
   const joinButton = document.getElementById("joinProjectBtn");
 
@@ -2422,49 +2425,25 @@ async function loadProjectDetails() {
       joinButton.disabled = true;
       joinButton.textContent = "Team Full";
     } else {
-      joinButton.addEventListener("click", () => {
+      joinButton.onclick = () => {
         requestToJoinProject(projectId);
-      });
+      };
     }
   }
 
-  // ==================================================
+  // ==========================================
   // COPY PROJECT LINK
-  // ==================================================
+  // ==========================================
 
   const copyButton = document.getElementById("copyProjectLinkBtn");
 
   if (copyButton) {
-    copyButton.addEventListener("click", copyProjectLink);
+    copyButton.onclick = copyProjectLink;
   }
 
-  // ==================================================
-  // BASIC PROJECT INFORMATION
-  // ==================================================
-
-  titleElement.textContent = project.title;
-
-  setText(
-    "projectDescription",
-    project.description || "No description available.",
-  );
-  const descriptionElement = document.getElementById("projectDescription");
-
-  if (descriptionElement) {
-    descriptionElement.textContent =
-      project.description || "No description available.";
-  }
-
-  setText(
-    "projectSkills",
-    (project.required_skills || []).join(", ") || "Not specified",
-  );
-
-  setText("projectTeamSize", project.team_size);
-
-  // ==================================================
-  // LOAD TEAM MEMBERS
-  // ==================================================
+  // ==========================================
+  // LOAD MEMBERS
+  // ==========================================
 
   const { data: members, error: membersError } = await supabaseClient
     .from("project_members")
@@ -2490,9 +2469,19 @@ async function loadProjectDetails() {
     return;
   }
 
-  const memberCount = members?.length || 0;
+  // ==========================================
+  // IMPORTANT SAFETY FILTER
+  // ==========================================
+  // The creator is NOT a project_members entry.
+  // If an old bad database row exists, ignore it.
 
-  // Creator counts as one team member
+  const teamMembers = (members || []).filter(
+    (member) => member.user_id !== project.creator_id,
+  );
+
+  const memberCount = teamMembers.length;
+
+  // Creator counts as one team member.
   const totalMembers = memberCount + 1;
 
   const teamSize = Number(project.team_size) || 2;
@@ -2506,14 +2495,12 @@ async function loadProjectDetails() {
 
   const isFull = totalMembers >= teamSize;
 
-  // ==================================================
-  // UPDATE PROJECT STATS
-  // ==================================================
+  // ==========================================
+  // PROJECT STATUS
+  // ==========================================
 
   setText("projectProgress", `${totalMembers} / ${teamSize} members`);
 
-  // IMPORTANT:
-  // Use the actual database status instead of assuming Open.
   let displayStatus = "Open";
 
   if (project.status === "closed") {
@@ -2541,9 +2528,9 @@ async function loadProjectDetails() {
     progressBar.style.width = `${progressPercent}%`;
   }
 
-  // ==================================================
+  // ==========================================
   // TEAM CONTAINER
-  // ==================================================
+  // ==========================================
 
   const container = document.getElementById("projectMembers");
 
@@ -2551,9 +2538,9 @@ async function loadProjectDetails() {
 
   container.innerHTML = "";
 
-  // ==================================================
-  // PROJECT CREATOR
-  // ==================================================
+  // ==========================================
+  // CREATOR
+  // ==========================================
 
   const creatorProfile = project.profiles || {};
 
@@ -2602,10 +2589,11 @@ async function loadProjectDetails() {
                 ${creatorSkills
                   .slice(0, 5)
                   .map(
-                    (skill) =>
-                      `<span class="member-skill-tag">
+                    (skill) => `
+                      <span class="member-skill-tag">
                         ${escapeHtml(skill)}
-                      </span>`,
+                      </span>
+                    `,
                   )
                   .join("")}
 
@@ -2619,7 +2607,7 @@ async function loadProjectDetails() {
                     : ""
                 }
 
-              </dtml
+              </div>
             `
             : ""
         }
@@ -2634,17 +2622,18 @@ async function loadProjectDetails() {
   `;
 
   container.appendChild(creatorElement);
+
   const teamMemberCountElement = document.getElementById("teamMemberCount");
 
   if (teamMemberCountElement) {
     teamMemberCountElement.textContent = `${totalMembers} / ${teamSize} members`;
   }
 
-  // ==================================================
+  // ==========================================
   // TEAM MEMBERS
-  // ==================================================
+  // ==========================================
 
-  (members || []).forEach((member) => {
+  teamMembers.forEach((member) => {
     const element = document.createElement("div");
 
     element.className = "project-member-card";
@@ -2704,7 +2693,8 @@ async function loadProjectDetails() {
             profile.experience_level
               ? `
                 <small class="member-experience">
-                  ${escapeHtml(profile.experience_level)} level
+                  ${escapeHtml(profile.experience_level)}
+                  level
                 </small>
               `
               : ""
@@ -2718,10 +2708,11 @@ async function loadProjectDetails() {
                   ${memberSkills
                     .slice(0, 5)
                     .map(
-                      (skill) =>
-                        `<span class="member-skill-tag">
+                      (skill) => `
+                        <span class="member-skill-tag">
                           ${escapeHtml(skill)}
-                        </span>`,
+                        </span>
+                      `,
                     )
                     .join("")}
 
@@ -2791,9 +2782,9 @@ async function loadProjectDetails() {
     container.appendChild(element);
   });
 
-  // ==================================================
+  // ==========================================
   // TEAM PROGRESS
-  // ==================================================
+  // ==========================================
 
   const progressElement = document.getElementById("projectProgress");
 
@@ -3497,7 +3488,10 @@ window.respondToInvitation = async function (
   declineButton.disabled = true;
 
   try {
-    // Get current user
+    // ==========================================
+    // CURRENT USER
+    // ==========================================
+
     const {
       data: { user },
       error: userError,
@@ -3507,7 +3501,10 @@ window.respondToInvitation = async function (
       throw new Error("Please log in again.");
     }
 
-    // Load invitation
+    // ==========================================
+    // LOAD INVITATION
+    // ==========================================
+
     const { data: invitation, error: invitationError } = await supabaseClient
       .from("invitations")
       .select(
@@ -3529,14 +3526,14 @@ window.respondToInvitation = async function (
       throw invitationError || new Error("Invitation not found.");
     }
 
-    // Make sure current user is the receiver
+    // Only the receiver can respond
     if (invitation.receiver_id !== user.id) {
       throw new Error("You cannot respond to this invitation.");
     }
 
-    // ==============================
+    // ==========================================
     // DECLINE
-    // ==============================
+    // ==========================================
 
     if (response === "declined") {
       const { error } = await supabaseClient
@@ -3559,9 +3556,9 @@ window.respondToInvitation = async function (
       return;
     }
 
-    // ==============================
+    // ==========================================
     // ACCEPT
-    // ==============================
+    // ==========================================
 
     const project = invitation.project;
 
@@ -3573,7 +3570,25 @@ window.respondToInvitation = async function (
       throw new Error("This project is closed.");
     }
 
-    // Load members
+    // ==========================================
+    // DETERMINE WHO IS ACTUALLY JOINING
+    // ==========================================
+
+    const joiningUserId =
+      invitation.request_type === "join_request"
+        ? invitation.sender_id
+        : invitation.receiver_id;
+
+    // Safety check:
+    // Project creator must NEVER be inserted into project_members.
+    if (joiningUserId === project.creator_id) {
+      throw new Error("The project creator cannot be added as a team member.");
+    }
+
+    // ==========================================
+    // LOAD CURRENT MEMBERS
+    // ==========================================
+
     const { data: members, error: membersError } = await supabaseClient
       .from("project_members")
       .select("id, user_id")
@@ -3583,26 +3598,37 @@ window.respondToInvitation = async function (
       throw membersError;
     }
 
+    // ==========================================
+    // CHECK IF ALREADY A MEMBER
+    // ==========================================
+
     const existingMember = (members || []).some(
-      (member) => member.user_id === user.id,
+      (member) => member.user_id === joiningUserId,
     );
 
     if (existingMember) {
-      throw new Error("You are already a member of this project.");
+      throw new Error("This student is already a member of this project.");
     }
+
+    // ==========================================
+    // TEAM SIZE
+    // ==========================================
 
     const currentTeamSize = (members?.length || 0) + 1;
 
-    if (currentTeamSize > Number(project.team_size)) {
+    if (currentTeamSize >= Number(project.team_size)) {
       throw new Error("This project is already full.");
     }
 
-    // Add user to project
+    // ==========================================
+    // ADD THE CORRECT USER
+    // ==========================================
+
     const { error: memberError } = await supabaseClient
       .from("project_members")
       .insert({
         project_id: project.id,
-        user_id: user.id,
+        user_id: joiningUserId,
         role: invitation.role || "Team Member",
       });
 
@@ -3610,7 +3636,10 @@ window.respondToInvitation = async function (
       throw memberError;
     }
 
-    // Mark invitation accepted
+    // ==========================================
+    // MARK INVITATION ACCEPTED
+    // ==========================================
+
     const { error: updateError } = await supabaseClient
       .from("invitations")
       .update({
@@ -3624,8 +3653,13 @@ window.respondToInvitation = async function (
       throw updateError;
     }
 
-    // Update project status if team is now full
-    if (currentTeamSize >= Number(project.team_size)) {
+    // ==========================================
+    // UPDATE PROJECT STATUS
+    // ==========================================
+
+    const newTeamSize = currentTeamSize + 1;
+
+    if (newTeamSize >= Number(project.team_size)) {
       const { error: statusError } = await supabaseClient
         .from("projects")
         .update({
@@ -3638,7 +3672,7 @@ window.respondToInvitation = async function (
       }
     }
 
-    alert("Invitation accepted! 🎉");
+    alert("Request accepted! 🎉");
 
     await loadInvitations(user.id);
     await loadDashboard();
@@ -3648,39 +3682,9 @@ window.respondToInvitation = async function (
     acceptButton.disabled = false;
     declineButton.disabled = false;
 
-    alert(error.message || "Could not respond to invitation.");
+    alert(error.message || "Could not process the request.");
   }
 };
-/* =========================================
-   GLOBAL MOBILE NAVIGATION
-   ========================================= */
-
-function setupMobileNavigation() {
-  const menuButton = document.getElementById("mobileMenuBtn");
-  const mobileMenu = document.getElementById("mobileNavMenu");
-
-  if (!menuButton || !mobileMenu) {
-    return;
-  }
-
-  menuButton.addEventListener("click", () => {
-    const isOpen = mobileMenu.classList.toggle("open");
-
-    menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-
-    menuButton.textContent = isOpen ? "✕" : "☰";
-  });
-
-  // Close the menu after selecting a page
-  mobileMenu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mobileMenu.classList.remove("open");
-
-      menuButton.setAttribute("aria-expanded", "false");
-      menuButton.textContent = "☰";
-    });
-  });
-}
 window.deleteCurrentAccount = async function () {
   const confirmed = confirm(
     "Are you sure you want to permanently delete your TeamForge account?\n\nThis cannot be undone.",
