@@ -551,6 +551,36 @@ async function requestToJoinProject(projectId) {
     }
   }
 }
+/* =========================================
+   GLOBAL MOBILE NAVIGATION
+   ========================================= */
+
+function setupMobileNavigation() {
+  const menuButton = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileNavMenu");
+
+  if (!menuButton || !mobileMenu) {
+    return;
+  }
+
+  menuButton.addEventListener("click", () => {
+    const isOpen = mobileMenu.classList.toggle("open");
+
+    menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+    menuButton.textContent = isOpen ? "✕" : "☰";
+  });
+
+  mobileMenu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+
+      menuButton.setAttribute("aria-expanded", "false");
+
+      menuButton.textContent = "☰";
+    });
+  });
+}
 async function refreshInvitationListAfterResponse(userId) {
   await loadInvitations(userId);
 }
