@@ -801,8 +801,9 @@ function setupLandingPage() {
     const button = document.getElementById(id);
 
     if (button) {
-      button.addEventListener("click", () => {
-        window.location.href = "auth.html";
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        window.location.href = "./auth.html";
       });
     }
   });
@@ -817,21 +818,9 @@ function setupLandingPage() {
     });
   }
 
-  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  document.querySelectorAll('a[href="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
-      const targetId = link.getAttribute("href");
-
-      if (!targetId || targetId === "#") return;
-
-      const target = document.querySelector(targetId);
-
-      if (target) {
-        event.preventDefault();
-
-        target.scrollIntoView({
-          behavior: "smooth",
-        });
-      }
+      event.preventDefault();
     });
   });
 
@@ -839,16 +828,22 @@ function setupLandingPage() {
     ".problem-card, .step-card, .feature-card",
   );
 
-  const reveal = () => {
-    revealElements.forEach((element) => {
-      if (element.getBoundingClientRect().top < window.innerHeight - 80) {
-        element.classList.add("visible");
-      }
-    });
-  };
+  if (revealElements.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      },
+    );
 
-  window.addEventListener("scroll", reveal);
-  reveal();
+    revealElements.forEach((element) => observer.observe(element));
+  }
 }
 
 // ======================================================
