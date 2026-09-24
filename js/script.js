@@ -429,7 +429,6 @@ async function requestToJoinProject(projectId) {
   }
 
   try {
-    // Get current user
     const {
       data: { user },
       error: userError,
@@ -450,7 +449,7 @@ async function requestToJoinProject(projectId) {
       throw projectError;
     }
 
-    // Prevent creator from joining their own project
+    // Creator cannot request to join their own project
     if (project.creator_id === user.id) {
       throw new Error("You are already the creator of this project.");
     }
@@ -460,39 +459,28 @@ async function requestToJoinProject(projectId) {
       throw new Error("This project is no longer accepting members.");
     }
 
-    // Check current team size
+    // Check current team members
     const { data: members, error: membersError } = await supabaseClient
       .from("project_members")
-      .select("id")
+      .select("id, user_id")
       .eq("project_id", projectId);
 
     if (membersError) {
       throw membersError;
     }
 
-    const currentTeamSize = (members?.length || 0) + 1;
+    // Remove accidental creator membership rows from the count
+    const teamMembers = (members || []).filter(
+      (member) => member.user_id !== project.creator_id,
+    );
+
+    const currentTeamSize = teamMembers.length + 1;
 
     if (currentTeamSize >= Number(project.team_size)) {
       throw new Error("This project is already full.");
     }
 
-    // Check whether already a member
-    const { data: existingMember, error: memberError } = await supabaseClient
-      .from("project_members")
-      .select("id")
-      .eq("project_id", projectId)
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (memberError) {
-      throw memberError;
-    }
-
-    if (existingMember) {
-      throw new Error("You are already a member of this project.");
-    }
-
-    // Check existing pending/accepted request
+    // Check whether THIS user already has a join request
     const { data: existingRequest, error: requestError } = await supabaseClient
       .from("invitations")
       .select("id, status, request_type")
@@ -500,6 +488,7 @@ async function requestToJoinProject(projectId) {
       .eq("sender_id", user.id)
       .eq("request_type", "join_request")
       .in("status", ["pending", "accepted"])
+      .limit(1)
       .maybeSingle();
 
     if (requestError) {
@@ -511,7 +500,9 @@ async function requestToJoinProject(projectId) {
         throw new Error("You already have a pending request for this project.");
       }
 
-      throw new Error("You have already joined this project.");
+      if (existingRequest.status === "accepted") {
+        throw new Error("You have already joined this project.");
+      }
     }
 
     // Create join request
@@ -3513,10 +3504,6 @@ window.respondToInvitation = async function (
   declineButton.disabled = true;
 
   try {
-    // ==========================================
-    // CURRENT USER
-    // ==========================================
-
     const {
       data: { user },
       error: userError,
@@ -3526,10 +3513,7 @@ window.respondToInvitation = async function (
       throw new Error("Please log in again.");
     }
 
-    // ==========================================
-    // LOAD INVITATION
-    // ==========================================
-
+    // Load invitation + project
     const { data: invitation, error: invitationError } = await supabaseClient
       .from("invitations")
       .select(
@@ -3553,12 +3537,12 @@ window.respondToInvitation = async function (
 
     // Only the receiver can respond
     if (invitation.receiver_id !== user.id) {
-      throw new Error("You cannot respond to this invitation.");
+      throw new Error("You cannot respond to this request.");
     }
 
-    // ==========================================
+    // ==============================
     // DECLINE
-    // ==========================================
+    // ==============================
 
     if (response === "declined") {
       const { error } = await supabaseClient
@@ -3574,16 +3558,16 @@ window.respondToInvitation = async function (
         throw error;
       }
 
-      alert("Invitation declined.");
+      alert("Request declined.");
 
       await loadInvitations(user.id);
 
       return;
     }
 
-    // ==========================================
+    // ==============================
     // ACCEPT
-    // ==========================================
+    // ==============================
 
     const project = invitation.project;
 
@@ -3591,29 +3575,18 @@ window.respondToInvitation = async function (
       throw new Error("Project could not be found.");
     }
 
-    if ((project.status || "open").toLowerCase() === "closed") {
-      throw new Error("This project is closed.");
-    }
-
-    // ==========================================
-    // DETERMINE WHO IS ACTUALLY JOINING
-    // ==========================================
-
+    // Determine who is actually joining
     const joiningUserId =
       invitation.request_type === "join_request"
         ? invitation.sender_id
         : invitation.receiver_id;
 
-    // Safety check:
-    // Project creator must NEVER be inserted into project_members.
+    // Creator must never be inserted as a team member
     if (joiningUserId === project.creator_id) {
       throw new Error("The project creator cannot be added as a team member.");
     }
 
-    // ==========================================
-    // LOAD CURRENT MEMBERS
-    // ==========================================
-
+    // Load current members
     const { data: members, error: membersError } = await supabaseClient
       .from("project_members")
       .select("id, user_id")
@@ -3623,32 +3596,28 @@ window.respondToInvitation = async function (
       throw membersError;
     }
 
-    // ==========================================
-    // CHECK IF ALREADY A MEMBER
-    // ==========================================
+    // Ignore accidental creator membership rows
+    const teamMembers = (members || []).filter(
+      (member) => member.user_id !== project.creator_id,
+    );
 
-    const existingMember = (members || []).some(
+    // Check whether requester is already a member
+    const alreadyMember = teamMembers.some(
       (member) => member.user_id === joiningUserId,
     );
 
-    if (existingMember) {
-      throw new Error("This student is already a member of this project.");
+    if (alreadyMember) {
+      throw new Error("This student is already a team member.");
     }
 
-    // ==========================================
-    // TEAM SIZE
-    // ==========================================
-
-    const currentTeamSize = (members?.length || 0) + 1;
+    // Creator counts as one team member
+    const currentTeamSize = teamMembers.length + 1;
 
     if (currentTeamSize >= Number(project.team_size)) {
       throw new Error("This project is already full.");
     }
 
-    // ==========================================
-    // ADD THE CORRECT USER
-    // ==========================================
-
+    // Add the ACTUAL joining student
     const { error: memberError } = await supabaseClient
       .from("project_members")
       .insert({
@@ -3661,10 +3630,7 @@ window.respondToInvitation = async function (
       throw memberError;
     }
 
-    // ==========================================
-    // MARK INVITATION ACCEPTED
-    // ==========================================
-
+    // Mark invitation accepted
     const { error: updateError } = await supabaseClient
       .from("invitations")
       .update({
@@ -3678,10 +3644,7 @@ window.respondToInvitation = async function (
       throw updateError;
     }
 
-    // ==========================================
-    // UPDATE PROJECT STATUS
-    // ==========================================
-
+    // New team size after adding member
     const newTeamSize = currentTeamSize + 1;
 
     if (newTeamSize >= Number(project.team_size)) {
@@ -3707,7 +3670,7 @@ window.respondToInvitation = async function (
     acceptButton.disabled = false;
     declineButton.disabled = false;
 
-    alert(error.message || "Could not process the request.");
+    alert(error.message || "Could not respond to the request.");
   }
 };
 window.deleteCurrentAccount = async function () {
