@@ -5304,35 +5304,29 @@ body {
 @media (max-width: 700px) {
   .global-navbar {
     height: 64px;
-    overflow: visible;
   }
 
   .global-navbar-inner {
     width: 100%;
-    max-width: none;
-    padding: 0 14px;
+    padding: 0 12px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-sizing: border-box;
-    overflow: visible;
   }
 
   .global-navbar-logo {
-    font-size: 20px;
+    font-size: 19px;
     white-space: nowrap;
-    flex: 0 0 auto;
+    flex-shrink: 0;
   }
 
   .global-navbar-links {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    flex-shrink: 0;
     gap: 0;
-    flex: 0 0 auto;
-    width: auto;
-    min-width: 0;
-    overflow: visible;
   }
 
   .global-navbar-links a {
@@ -5341,19 +5335,16 @@ body {
 
   .global-logout-btn {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 82px;
-    min-width: 82px;
-    max-width: 82px;
-    height: 38px;
+    width: 76px;
+    min-width: 76px;
+    height: 36px;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
     white-space: nowrap;
-    overflow: visible;
-    flex: 0 0 82px;
     font-size: 13px;
-    line-height: 1;
+    flex-shrink: 0;
   }
 }
