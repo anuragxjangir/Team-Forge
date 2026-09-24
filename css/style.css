@@ -5302,15 +5302,38 @@ body {
 /* Mobile */
 
 @media (max-width: 700px) {
+  .global-navbar {
+    height: 64px;
+  }
+
   .global-navbar-inner {
-    padding: 0 16px;
+    padding: 0 14px;
+  }
+
+  .global-navbar-logo {
+    font-size: 20px;
+    white-space: nowrap;
   }
 
   .global-navbar-links {
-    gap: 12px;
+    gap: 0;
+    flex-shrink: 0;
   }
 
   .global-navbar-links a {
     display: none;
+  }
+
+  .global-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 72px;
+    height: 38px;
+    padding: 0 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 13px;
   }
 }
