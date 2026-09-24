@@ -1,0 +1,294 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Project | TeamForge</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <style>
+      .create-project-page {
+        min-height: 100vh;
+        padding-bottom: 60px;
+      }
+
+      .form-container {
+        width: min(750px, 92%);
+        margin: 50px auto;
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .form-container h1 {
+        margin-bottom: 10px;
+      }
+
+      .form-container > p {
+        color: #777;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 22px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        box-sizing: border-box;
+      }
+
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .checkbox-item input {
+        width: auto;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .form-actions button {
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+      }
+
+      #createProjectSubmit {
+        font-weight: 600;
+      }
+
+      #createProjectMessage {
+        margin-top: 18px;
+        font-weight: 600;
+      }
+
+      @media (max-width: 600px) {
+        .form-container {
+          padding: 25px;
+        }
+
+        .checkbox-group {
+          grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+    
+  </head>
+
+  <body>
+    
+    <div class="create-project-page">
+      <nav class="navbar">
+        <div class="logo">TeamForge</div>
+
+        <div class="nav-links">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="profile.html">Profile</a>
+        </div>
+      </nav>
+
+      <main class="form-container">
+        <h1 id="projectFormTitle">Create a Project</h1>
+        <p id="projectFormSubtitle">
+          Tell TeamForge what you are building and what kind of teammates you
+          need.
+        </p>
+
+        <form id="projectForm">
+          <div class="form-group">
+            <label for="projectTitle">Project Name</label>
+            <input
+              type="text"
+              id="projectTitle"
+              placeholder="e.g. Smart Campus Assistant"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="projectDescription">Project Description</label>
+            <textarea
+              id="projectDescription"
+              placeholder="Describe your project..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="requiredSkills"> Required Skills </label>
+
+            <input
+              type="text"
+              id="requiredSkills"
+              placeholder="JavaScript, HTML, CSS, SQL"
+            />
+            <label for="projectInterests">Project Interests</label>
+            <input
+              type="text"
+              id="projectInterests"
+              placeholder="Web Development, AI/ML, IoT"
+            />
+
+            <small> Separate skills with commas. </small>
+          </div>
+
+          <div class="form-group">
+            <label>Required Roles</label>
+
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  name="projectRoles"
+                  value="Frontend Developer"
+                />
+                Frontend Developer
+              </label>
+
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  name="projectRoles"
+                  value="Backend Developer"
+                />
+                Backend Developer
+              </label>
+
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  name="projectRoles"
+                  value="UI/UX Designer"
+                />
+                UI/UX Designer
+              </label>
+
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  name="projectRoles"
+                  value="Database Developer"
+                />
+                Database Developer
+              </label>
+
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  name="projectRoles"
+                  value="AI/ML Developer"
+                />
+                AI/ML Developer
+              </label>
+
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  name="projectRoles"
+                  value="Project Manager"
+                />
+                Project Manager
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="teamSize">Team Size</label>
+
+            <select id="teamSize" required>
+              <option value="2">2 members</option>
+              <option value="3">3 members</option>
+              <option value="4">4 members</option>
+              <option value="5">5 members</option>
+              <option value="6">6 members</option>
+              <option value="7">7 members</option>
+              <option value="8">8 members</option>
+              <option value="9">9 members</option>
+              <option value="10">10 members</option>
+              <option value="11">11 members</option>
+              <option value="12">12 members</option>
+              <option value="13">13 members</option>
+              <option value="14">14 members</option>
+              <option value="15">15 members</option>
+              <option value="16">16 members</option>
+              <option value="17">17 members</option>
+              <option value="18">18 members</option>
+              <option value="19">19 members</option>
+              <option value="20">20 members</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="projectAvailability"> Required Availability </label>
+
+            <select id="projectAvailability" required>
+              <option value="Any">Any</option>
+              <option value="Weekdays">Weekdays</option>
+              <option value="Weekends">Weekends</option>
+              <option value="Evenings">Evenings</option>
+              <option value="Flexible">Flexible</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              onclick="window.location.href = 'dashboard.html'"
+            >
+              Cancel
+            </button>
+
+            <button type="submit" id="createProjectSubmit">
+              Create Project
+            </button>
+            <p id="projectMessage" class="profile-message"></p>
+          </div>
+
+          <div id="createProjectMessage"></div>
+        </form>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/script.js"></script>
+  </body>
+</html>

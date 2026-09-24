@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Browse Projects | TeamForge</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <header class="project-navbar">
+      <a href="dashboard.html" class="project-navbar-logo">
+        Team<span>Forge</span>
+      </a>
+
+      <a href="dashboard.html" class="project-dashboard-btn">
+        <span>←</span>
+        Dashboard
+      </a>
+    </header>
+
+    <!-- Main -->
+    <main class="browse-projects-page">
+      <!-- Page Header -->
+      <section class="browse-header">
+        <div>
+          <p class="page-label">PROJECT DISCOVERY</p>
+
+          <h1>Find your next project.</h1>
+
+          <p>
+            Explore projects created by students and find opportunities that
+            match your skills, interests, and goals.
+          </p>
+        </div>
+
+        <div class="browse-header-icon">🔎</div>
+      </section>
+
+      <!-- Search / Filters -->
+      <section class="project-search-card">
+        <div class="search-box">
+          <label for="projectSearch"> Search Projects </label>
+
+          <input
+            type="text"
+            id="projectSearch"
+            placeholder="Search by project name, skill, or interest..."
+          />
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-box">
+            <label for="skillFilter"> Skill </label>
+
+            <select id="skillFilter">
+              <option value="">All Skills</option>
+            </select>
+          </div>
+
+          <div class="filter-box">
+            <label for="interestFilter"> Interest </label>
+
+            <select id="interestFilter">
+              <option value="">All Interests</option>
+            </select>
+          </div>
+
+          <div class="filter-box">
+            <label for="statusFilter"> Status </label>
+
+            <select id="statusFilter">
+              <option value="">All Projects</option>
+
+              <option value="open">Open</option>
+
+              <option value="full">Full</option>
+
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section class="browse-results">
+        <div class="browse-results-header">
+          <div>
+            <span class="section-label"> DISCOVER </span>
+
+            <h2>Available Projects</h2>
+          </div>
+
+          <span id="projectResultsCount"> Loading... </span>
+        </div>
+
+        <div id="browseProjectsList">
+          <div class="browse-loading">Loading projects...</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>

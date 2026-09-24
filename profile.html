@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>TeamForge | Your Profile</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <main class="profile-page">
+      <div class="profile-container">
+        <!-- ========================================
+                 HEADER
+                 ======================================== -->
+
+        <div class="profile-header">
+          <a href="index.html" class="logo"> Team<span>Forge</span> </a>
+
+          <div>
+            <h1>Build your TeamForge profile</h1>
+
+            <p>
+              Tell us about yourself so we can find teammates who complement
+              your skills.
+            </p>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 PROFILE FORM
+                 ======================================== -->
+
+        <form id="profileForm" class="profile-card">
+          <!-- BASIC INFORMATION -->
+
+          <div class="profile-section">
+            <h2>Basic Information</h2>
+
+            <p class="section-description">
+              Start with a few details about yourself.
+            </p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="profileName"> Full Name </label>
+
+                <input
+                  type="text"
+                  id="profileName"
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="college"> College </label>
+
+                <input
+                  type="text"
+                  id="college"
+                  placeholder="Your college name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="bio"> Short Bio </label>
+
+              <textarea
+                id="bio"
+                rows="4"
+                maxlength="300"
+                placeholder="Tell potential teammates a little about yourself..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- ========================================
+                     SKILLS
+                     ======================================== -->
+
+          <div class="profile-section">
+            <h2>Skills</h2>
+
+            <p class="section-description">
+              Enter the technologies or skills you can contribute.
+            </p>
+
+            <div class="form-group">
+              <label for="skills"> Your Skills </label>
+
+              <input
+                type="text"
+                id="skills"
+                placeholder="Java, HTML, CSS, Python, UI/UX"
+              />
+
+              <small> Separate multiple skills with commas. </small>
+            </div>
+          </div>
+
+          <!-- ========================================
+                     INTERESTS
+                     ======================================== -->
+
+          <div class="profile-section">
+            <h2>Interests</h2>
+
+            <p class="section-description">
+              What areas of technology or projects interest you?
+            </p>
+
+            <div class="form-group">
+              <label for="interests"> Your Interests </label>
+
+              <input
+                type="text"
+                id="interests"
+                placeholder="Web Development, AI, Cybersecurity, Gaming"
+              />
+
+              <small> Separate multiple interests with commas. </small>
+            </div>
+          </div>
+
+          <!-- ========================================
+                     PREFERRED ROLES
+                     ======================================== -->
+
+          <div class="profile-section">
+            <h2>Preferred Roles</h2>
+
+            <p class="section-description">
+              What role would you like to contribute as?
+            </p>
+
+            <div class="role-grid">
+              <label class="checkbox-card">
+                <input
+                  type="checkbox"
+                  name="roles"
+                  value="Frontend Developer"
+                />
+
+                <span>Frontend Developer</span>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" name="roles" value="Backend Developer" />
+
+                <span>Backend Developer</span>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" name="roles" value="UI/UX Designer" />
+
+                <span>UI/UX Designer</span>
+              </label>
+
+              <label class="checkbox-card">
+                <input
+                  type="checkbox"
+                  name="roles"
+                  value="Database Developer"
+                />
+
+                <span>Database Developer</span>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" name="roles" value="Data Analyst" />
+
+                <span>Data Analyst</span>
+              </label>
+
+              <label class="checkbox-card">
+                <input type="checkbox" name="roles" value="Project Manager" />
+
+                <span>Project Manager</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- ========================================
+                     AVAILABILITY
+                     ======================================== -->
+
+          <div class="profile-section">
+            <h2>Availability</h2>
+
+            <p class="section-description">
+              When are you generally available for project work?
+            </p>
+
+            <div class="form-group">
+              <label for="availability"> Availability </label>
+
+              <select id="availability" required>
+                <option value="">Select your availability</option>
+
+                <option value="Weekdays">Weekdays</option>
+
+                <option value="Weekends">Weekends</option>
+
+                <option value="Evenings">Evenings</option>
+
+                <option value="Flexible">Flexible</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ========================================
+                     EXPERIENCE
+                     ======================================== -->
+
+          <div class="profile-section">
+            <h2>Experience Level</h2>
+
+            <p class="section-description">
+              Choose the option that best describes your current level.
+            </p>
+
+            <div class="experience-grid">
+              <label class="radio-card">
+                <input
+                  type="radio"
+                  name="experience"
+                  value="Beginner"
+                  required
+                />
+
+                <span>
+                  <strong>Beginner</strong>
+                  <small>I'm starting out.</small>
+                </span>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="experience" value="Intermediate" />
+
+                <span>
+                  <strong>Intermediate</strong>
+                  <small>I've built some projects.</small>
+                </span>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="experience" value="Advanced" />
+
+                <span>
+                  <strong>Advanced</strong>
+                  <small>I'm confident with my skills.</small>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- ========================================
+                     SUBMIT
+                     ======================================== -->
+
+          <div class="profile-submit">
+            <div id="profileMessage" class="profile-message"></div>
+
+            <button type="submit" class="auth-submit">
+              Save Profile & Continue →
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- ========================================
+         SUPABASE
+         ======================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ========================================
+         TEAMFORGE JAVASCRIPT
+         ======================================== -->
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>

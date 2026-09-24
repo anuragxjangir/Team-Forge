@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard | TeamForge</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-page">
+      <!-- Navigation -->
+      <nav class="navbar dashboard-navbar">
+        <div class="logo">TeamForge</div>
+
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="profile.html">Profile</a>
+          <a href="browse-projects.html">Browse Projects</a>
+          <button id="logoutBtn">Logout</button>
+        </div>
+      </nav>
+
+      <main class="dashboard-container">
+        <!-- Hero -->
+        <section class="dashboard-hero">
+          <div>
+            <span class="dashboard-label">YOUR DASHBOARD</span>
+
+            <h1>
+              Build something<br />
+              <span>great together.</span>
+            </h1>
+
+            <p>
+              Manage your projects, discover talented teammates, and build teams
+              that actually fit.
+            </p>
+          </div>
+
+          <button id="dashboardCreateProjectBtn" class="hero-create-button">
+            + Create Project
+          </button>
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon project-icon">P</div>
+
+            <div class="stat-content">
+              <span class="stat-label">YOUR PROJECTS</span>
+
+              <div class="stat-number" id="projectCount">0</div>
+
+              <span class="stat-description"> Projects you're part of </span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon match-icon">M</div>
+
+            <div class="stat-content">
+              <span class="stat-label">MATCHES</span>
+
+              <div class="stat-number" id="matchCount">0</div>
+
+              <span class="stat-description">Potential teammates</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon invitation-icon">I</div>
+
+            <div class="stat-content">
+              <span class="stat-label">INVITATIONS</span>
+
+              <div class="stat-number" id="invitationCount">0</div>
+
+              <span class="stat-description"> Pending team requests </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- My Projects -->
+        <section class="dashboard-section">
+          <div class="section-header">
+            <div>
+              <span class="section-label">PROJECTS</span>
+
+              <h2>My Projects</h2>
+
+              <p>Projects you created or joined.</p>
+            </div>
+
+            <button
+              id="dashboardCreateProjectBtnSecondary"
+              class="secondary-button"
+              onclick="window.location.href = 'create-project.html'"
+            >
+              + New Project
+            </button>
+          </div>
+
+          <div id="projectsList">
+            <p class="empty-state">Loading your projects...</p>
+          </div>
+        </section>
+
+        <!-- Recommended Teammates -->
+        <section class="dashboard-section">
+          <div class="section-header">
+            <div>
+              <span class="section-label">DISCOVER</span>
+
+              <h2>Recommended Teammates</h2>
+
+              <p>
+                Teammates matched to your projects based on skills and
+                interests.
+              </p>
+            </div>
+          </div>
+
+          <div id="matchesList">
+            <p class="empty-state">Matching will appear here soon.</p>
+          </div>
+        </section>
+
+        <!-- Invitations -->
+        <section class="dashboard-section">
+          <div class="section-header">
+            <div>
+              <span class="section-label">TEAM REQUESTS</span>
+
+              <h2>Invitations</h2>
+
+              <p>Manage invitations you've received.</p>
+            </div>
+          </div>
+
+          <div id="invitationsList">
+            <p class="empty-state">No pending invitations.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/script.js"></script>
+  </body>
+</html>

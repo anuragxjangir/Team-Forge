@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Project Details | TeamForge</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <header class="project-navbar">
+      <a href="dashboard.html" class="project-navbar-logo">
+        Team<span>Forge</span>
+      </a>
+
+      <div class="project-header-actions">
+        <button
+          id="copyProjectLinkBtn"
+          class="copy-project-button"
+          type="button"
+        >
+          🔗 Copy Project Link
+        </button>
+
+        <a href="dashboard.html" class="project-dashboard-btn">
+          <span>←</span>
+          Dashboard
+        </a>
+      </div>
+    </header>
+
+    <main class="project-page">
+      <!-- Project Hero -->
+      <section class="project-header">
+        <div class="project-header-top">
+          <div>
+            <p class="page-label">PROJECT DETAILS</p>
+
+            <h1 id="projectTitle">Loading project...</h1>
+
+            <p id="projectDescription">Loading project information...</p>
+          </div>
+
+          <div class="project-header-icon">🚀</div>
+        </div>
+
+        <div id="projectManagementActions" class="project-management-actions">
+  <button
+    id="editProjectBtn"
+    class="project-management-button"
+    type="button"
+  >
+    ✏️ Edit Project
+  </button>
+
+  <button
+    id="closeProjectBtn"
+    class="project-management-button close-project-button"
+    type="button"
+  >
+    🔒 Close Project
+  </button>
+
+  <button
+    id="deleteProjectBtn"
+    class="project-management-button delete-project-button"
+    type="button"
+  >
+    🗑️ Delete Project
+  </button>
+</div>
+      </section>
+
+      <!-- Project Information -->
+      <section class="project-details-card">
+        <div class="details-card-header">
+          <div>
+            <span class="section-label">OVERVIEW</span>
+            <h2>Project Information</h2>
+          </div>
+
+          <button id="joinProjectBtn" class="join-project-button" type="button">
+            Request to Join
+          </button>
+        </div>
+
+        <div class="project-info-grid">
+          <div class="project-info-item">
+            <span class="info-label">REQUIRED SKILLS</span>
+            <div id="projectSkills" class="project-detail-value">
+              Loading...
+            </div>
+          </div>
+
+          <div class="project-info-item">
+            <span class="info-label">TEAM SIZE</span>
+            <div id="projectTeamSize" class="project-detail-value">
+              Loading...
+            </div>
+          </div>
+
+          <div class="project-info-item">
+            <span class="info-label">TEAM PROGRESS</span>
+            <div id="projectProgress" class="project-detail-value">
+              Loading...
+            </div>
+          </div>
+
+          <div class="project-info-item">
+            <span class="info-label">STATUS</span>
+            <div id="projectStatus" class="project-detail-value">
+              Loading...
+            </div>
+          </div>
+        </div>
+
+        <p id="joinProjectMessage" class="profile-message"></p>
+      </section>
+
+      <!-- Team Members -->
+      <section class="project-details-card">
+        <div class="details-card-header">
+          <div>
+            <span class="section-label">COLLABORATION</span>
+            <h2>Team Members</h2>
+<p>
+  People currently working on this project.
+  <strong id="teamMemberCount">Loading...</strong>
+</p>
+          </div>
+
+          <div class="team-count-icon">👥</div>
+        </div>
+
+        <div id="projectMembers">
+          <p class="empty-state">Loading team members...</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/script.js"></script>
+  </body>
+</html>

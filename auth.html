@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>TeamForge | Login</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- =================================================
+         TEAMFORGE AUTH PAGE
+         ================================================= -->
+
+    <main class="auth-page">
+      <div class="auth-container">
+        <!-- =================================================
+             LEFT SIDE — BRAND / VALUE
+             ================================================= -->
+
+        <section class="auth-info">
+          <!-- Logo -->
+
+          <a href="index.html" class="logo" aria-label="TeamForge Home">
+            Team<span>Forge</span>
+          </a>
+
+          <!-- Heading -->
+
+          <div class="auth-intro">
+            <span class="auth-eyebrow"> STUDENT COLLABORATION </span>
+
+            <h1>
+              Build your team.
+              <br />
+              <span>Build your future.</span>
+            </h1>
+
+            <p>
+              Find students with the right skills, interests, and goals to turn
+              your project ideas into reality.
+            </p>
+          </div>
+
+          <!-- Features -->
+
+          <div class="auth-features">
+            <div class="auth-feature">
+              <span class="auth-feature-icon"> ✓ </span>
+
+              <div>
+                <strong> Smart Matching </strong>
+
+                <p>
+                  Find teammates based on their actual skills and project
+                  requirements.
+                </p>
+              </div>
+            </div>
+
+            <div class="auth-feature">
+              <span class="auth-feature-icon"> ✓ </span>
+
+              <div>
+                <strong> Project Discovery </strong>
+
+                <p>
+                  Discover projects that match your interests and preferred
+                  roles.
+                </p>
+              </div>
+            </div>
+
+            <div class="auth-feature">
+              <span class="auth-feature-icon"> ✓ </span>
+
+              <div>
+                <strong> Build Together </strong>
+
+                <p>
+                  Form compatible teams and start building projects together.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================
+             RIGHT SIDE — AUTH CARD
+             ================================================= -->
+
+        <section class="auth-card">
+          <!-- Header -->
+
+          <div class="auth-header">
+            <span class="auth-card-label"> WELCOME TO TEAMFORGE </span>
+
+            <h2 id="authTitle">Create your account</h2>
+
+            <p id="authSubtitle">Join TeamForge and find your perfect team.</p>
+          </div>
+
+          <!-- =================================================
+               AUTH TABS
+               ================================================= -->
+
+          <div class="auth-tabs" role="tablist" aria-label="Authentication">
+            <button type="button" id="registerTab" class="auth-tab active">
+              Register
+            </button>
+
+            <button type="button" id="loginTab" class="auth-tab">Login</button>
+          </div>
+
+          <!-- =================================================
+               REGISTER FORM
+               ================================================= -->
+
+          <form id="registerForm">
+            <div class="form-group">
+              <label for="registerName"> Full Name </label>
+
+              <input
+                type="text"
+                id="registerName"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="registerEmail"> Email </label>
+
+              <input
+                type="email"
+                id="registerEmail"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="registerPassword"> Password </label>
+
+              <input
+                type="password"
+                id="registerPassword"
+                placeholder="Create a password"
+                minlength="6"
+                autocomplete="new-password"
+                required
+              />
+
+              <span class="form-hint"> Minimum 6 characters </span>
+            </div>
+
+            <button type="submit" class="auth-submit">
+              Create Account
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- =================================================
+               LOGIN FORM
+               ================================================= -->
+
+          <form id="loginForm" class="hidden">
+            <div class="form-group">
+              <label for="loginEmail"> Email </label>
+
+              <input
+                type="email"
+                id="loginEmail"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword"> Password </label>
+
+              <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+
+            <button type="submit" class="auth-submit">
+              Login
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- =================================================
+               STATUS MESSAGE
+               ================================================= -->
+
+          <div id="authMessage" class="auth-message" aria-live="polite"></div>
+
+          <!-- =================================================
+               FOOTER
+               ================================================= -->
+
+          <p class="auth-footer">
+            By continuing, you agree to use TeamForge responsibly for your
+            academic projects.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <!-- =================================================
+         SUPABASE
+         ================================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- =================================================
+         TEAMFORGE JAVASCRIPT
+         ================================================= -->
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>
