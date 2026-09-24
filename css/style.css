@@ -5483,3 +5483,66 @@ body {
     display: block;
   }
 }
+/* =====================================================
+   DANGER ZONE - DELETE ACCOUNT
+   ===================================================== */
+
+.danger-zone {
+  margin-top: 32px;
+  padding: 24px;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  background: #fff7f7;
+}
+
+.danger-label {
+  margin: 0 0 6px;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.danger-zone h2 {
+  margin: 0 0 8px;
+  color: #991b1b;
+  font-size: 20px;
+}
+
+.danger-zone > div > p:not(.danger-label) {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.delete-account-button {
+  margin-top: 20px;
+  padding: 11px 18px;
+  border: 1px solid #dc2626;
+  border-radius: 9px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-account-button:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);
+}
+
+.delete-account-button:active {
+  transform: translateY(0);
+}
+
+.delete-account-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

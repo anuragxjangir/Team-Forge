@@ -557,6 +557,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMobileNavigation();
   const registerForm = document.getElementById("registerForm");
   const loginForm = document.getElementById("loginForm");
+  const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener("click", window.deleteCurrentAccount);
+  }
 
   if (registerForm || loginForm) {
     setupAuthPage();
@@ -3676,3 +3681,64 @@ function setupMobileNavigation() {
     });
   });
 }
+window.deleteCurrentAccount = async function () {
+  const confirmed = confirm(
+    "Are you sure you want to permanently delete your TeamForge account?\n\nThis cannot be undone.",
+  );
+
+  if (!confirmed) return;
+
+  const button = document.getElementById("deleteAccountBtn");
+  const message = document.getElementById("deleteAccountMessage");
+
+  try {
+    button.disabled = true;
+    button.textContent = "Deleting...";
+
+    if (message) {
+      message.textContent = "Deleting your account...";
+      message.style.color = "#6b7280";
+    }
+
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabaseClient.auth.getSession();
+
+    if (sessionError || !session) {
+      throw new Error("You are not logged in.");
+    }
+
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/delete-account`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Account deletion failed.");
+    }
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href = "index.html";
+  } catch (error) {
+    console.error("Account deletion error:", error);
+
+    if (message) {
+      message.textContent = error.message;
+      message.style.color = "#dc2626";
+    }
+
+    button.disabled = false;
+    button.textContent = "Delete My Account";
+  }
+};
