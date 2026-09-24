@@ -554,6 +554,7 @@ async function refreshInvitationListAfterResponse(userId) {
   await loadInvitations(userId);
 }
 document.addEventListener("DOMContentLoaded", () => {
+  setupMobileNavigation();
   const registerForm = document.getElementById("registerForm");
   const loginForm = document.getElementById("loginForm");
 
@@ -3645,3 +3646,33 @@ window.respondToInvitation = async function (
     alert(error.message || "Could not respond to invitation.");
   }
 };
+/* =========================================
+   GLOBAL MOBILE NAVIGATION
+   ========================================= */
+
+function setupMobileNavigation() {
+  const menuButton = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileNavMenu");
+
+  if (!menuButton || !mobileMenu) {
+    return;
+  }
+
+  menuButton.addEventListener("click", () => {
+    const isOpen = mobileMenu.classList.toggle("open");
+
+    menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+    menuButton.textContent = isOpen ? "✕" : "☰";
+  });
+
+  // Close the menu after selecting a page
+  mobileMenu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+
+      menuButton.setAttribute("aria-expanded", "false");
+      menuButton.textContent = "☰";
+    });
+  });
+}

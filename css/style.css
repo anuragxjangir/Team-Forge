@@ -5348,3 +5348,138 @@ body {
     flex-shrink: 0;
   }
 }
+/* =========================================
+   MOBILE NAVIGATION
+   ========================================= */
+
+.mobile-menu-btn {
+  display: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-btn:hover {
+  background: #f3f4f6;
+}
+
+.mobile-nav-menu {
+  display: none;
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 700px) {
+  .global-navbar {
+    height: auto;
+    min-height: 64px;
+    overflow: visible;
+  }
+
+  .global-navbar-inner {
+    width: 100%;
+    min-height: 64px;
+    padding: 0 12px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .global-navbar-logo {
+    font-size: 19px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .global-navbar-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Hide desktop links */
+  .global-desktop-links {
+    display: none;
+  }
+
+  /* Show hamburger */
+  .mobile-menu-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  /* Keep Logout visible */
+  .global-logout-btn {
+    display: inline-flex;
+
+    width: 76px;
+    min-width: 76px;
+    height: 36px;
+
+    padding: 0;
+    margin: 0;
+
+    box-sizing: border-box;
+
+    align-items: center;
+    justify-content: center;
+
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    font-size: 13px;
+  }
+
+  /* Mobile dropdown */
+  .mobile-nav-menu {
+    width: 100%;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+
+    padding: 8px 12px;
+  }
+
+  .mobile-nav-menu a {
+    display: block;
+
+    padding: 14px 12px;
+
+    color: #374151;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    border-radius: 8px;
+  }
+
+  .mobile-nav-menu a:hover {
+    background: #f3f4f6;
+    color: #4f46e5;
+  }
+
+  /* Only show menu when JS adds .open */
+  .mobile-nav-menu.open {
+    display: block;
+  }
+}
