@@ -5304,20 +5304,35 @@ body {
 @media (max-width: 700px) {
   .global-navbar {
     height: 64px;
+    overflow: visible;
   }
 
   .global-navbar-inner {
+    width: 100%;
+    max-width: none;
     padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    overflow: visible;
   }
 
   .global-navbar-logo {
     font-size: 20px;
     white-space: nowrap;
+    flex: 0 0 auto;
   }
 
   .global-navbar-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     gap: 0;
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    overflow: visible;
   }
 
   .global-navbar-links a {
@@ -5328,12 +5343,17 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: auto;
-    min-width: 72px;
+    width: 82px;
+    min-width: 82px;
+    max-width: 82px;
     height: 38px;
-    padding: 0 13px;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
     white-space: nowrap;
-    flex-shrink: 0;
+    overflow: visible;
+    flex: 0 0 82px;
     font-size: 13px;
+    line-height: 1;
   }
 }
